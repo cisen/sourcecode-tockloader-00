@@ -56,6 +56,9 @@ class BoardInterface:
 		'hifive1': {'arch': 'rv32imac',
 		            'page_size': 512,
 		            'openocd': 'sifive-hifive1.cfg'},
+		'nucleo': {'arch': 'cortex-m4',
+		           'page_size': 512,
+		           'openocd': 'st_nucleo_f4.cfg'},
 	}
 
 	def __init__ (self, args):
