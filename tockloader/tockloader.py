@@ -140,13 +140,16 @@ class TockLoader:
 		- `erase` if true means erase all other apps before installing
 		'''
 		# Check if we have any apps to install. If not, then we can quit early.
+		# 文件为空则不安装
 		if len(tabs) == 0:
 			raise TockLoaderException('No TABs to install')
 
 		# Enter bootloader mode to get things started
+		# 链接板子
 		with self._start_communication_with_board():
 
 			# Start with the apps we are searching for.
+			# 
 			replacement_apps = self._extract_apps_from_tabs(tabs)
 
 			# If we want to install these as sticky apps, mark that now.
@@ -539,6 +542,8 @@ class TockLoader:
 
 	############################################################################
 	## Internal Helper Functions for Communicating with Boards
+	# 与板子通信的内部帮助函数
+	# 实际就是链接板子
 	############################################################################
 
 	@contextlib.contextmanager
@@ -554,6 +559,7 @@ class TockLoader:
 		# Time the operation
 		then = time.time()
 		try:
+			# 没有进入板子
 			if not self.args.no_bootloader_entry:
 				self.channel.enter_bootloader_mode()
 			else:
@@ -568,7 +574,7 @@ class TockLoader:
 			self._update_board_specific_options()
 
 			yield
-
+			# 如果是windows系统
 			if platform.system() == 'Windows':
 				for file in collect_temp_files:
 					os.remove(file)
@@ -768,7 +774,7 @@ class TockLoader:
 				logging.debug('  {}. {}'.format(i+1, app))
 
 		return apps
-
+	# 读取tab文件里面的所有app，一个tab文件可能包括多个app
 	def _extract_apps_from_tabs (self, tabs):
 		'''
 		Iterate through the list of TABs and create the app dict for each.
